@@ -22,6 +22,7 @@ import com.intellij.ui.IconManager;
 import com.intellij.usageView.UsageTreeColors;
 import com.intellij.usageView.UsageTreeColorsScheme;
 import com.intellij.usages.TextChunk;
+import com.intellij.util.ThrowableRunnable;
 import com.intellij.util.indexing.diagnostic.ProjectIndexingHistory.IndexingTimes;
 import com.jetbrains.python.psi.LanguageLevel;
 import java.nio.file.Path;
@@ -156,5 +157,10 @@ public final class BaseSdkCompat {
    */
   public static IdeModifiableModelsProvider createModifiableModelsProvider(Project project) {
     return new IdeModifiableModelsProviderImpl(project);
+  }
+
+  /** #api203: inline into {@code BlazeKotlinSyncPlugin} */
+  public static void wrapWithAllowSlowOperations(ThrowableRunnable runnable) {
+    runnable.run();
   }
 }

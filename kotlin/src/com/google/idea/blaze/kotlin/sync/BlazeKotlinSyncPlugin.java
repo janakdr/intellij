@@ -37,6 +37,7 @@ import com.google.idea.blaze.base.sync.data.BlazeProjectDataManager;
 import com.google.idea.blaze.base.sync.libraries.LibrarySource;
 import com.google.idea.blaze.java.sync.JavaLanguageLevelHelper;
 import com.google.idea.common.experiments.BoolExperiment;
+import com.google.idea.sdkcompat.general.BaseSdkCompat;
 import com.intellij.facet.FacetManager;
 import com.intellij.facet.ModifiableFacetModel;
 import com.intellij.openapi.application.ApplicationManager;
@@ -324,11 +325,14 @@ public class BlazeKotlinSyncPlugin implements BlazeSyncPlugin {
     static final KotlinLibraryConfigurator INSTANCE = new KotlinLibraryConfigurator();
 
     void configureModule(Project project, Module module) {
-      configureModule(
-          module,
-          getDefaultPathToJarFile(project),
-          null,
-          new NotificationMessageCollector(project, "Configuring Kotlin", "Configuring Kotlin"));
+      BaseSdkCompat.wrapWithAllowSlowOperations(
+          () ->
+              configureModule(
+                  module,
+                  getDefaultPathToJarFile(project),
+                  null,
+                  new NotificationMessageCollector(
+                      project, "Configuring Kotlin", "Configuring Kotlin")));
     }
   }
 }
